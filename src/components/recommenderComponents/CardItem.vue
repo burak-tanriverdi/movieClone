@@ -30,7 +30,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="relative w-64 p-2 mt-8" >
+  <div class="relative w-64 p-2 mt-4" >
     <div class="relative">
         <img class="object-cover w-full h-auto mb-4 rounded-xl" :src="getImageUrl()" :alt="`Poster of ${movie.title}`" />
         <div class="flex justify-center items-center-safe w-12 h-12 -bottom-5 left-0 absolute p-2 rounded-full border-4 border-[#00ff80] z-10 text-center text-s font-bold text-white bg-[#092d36]">
