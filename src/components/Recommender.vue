@@ -1,21 +1,21 @@
 <template>
-    <div class="mt-4 flex flex-col flex-wrap content-around">
+    <div class="flex flex-col flex-wrap content-around mt-4">
       <div class="flex items-center">
-        <h2 class="mr-5 font-semibold text-xl">What's Popular</h2>
+        <h2 class="mr-5 text-xl font-semibold">What's Popular</h2>
         <div class="flex items-center justify-center">
           <div class="relative flex w-64 h-10 border border-[#032540] rounded-full overflow-hidden cursor-pointer">
             <div class="absolute top-0 left-0 h-full w-1/2 bg-[#032540] rounded-full transition-transform duration-300" :class="currentSelection === 'popular' ? 'translate-x-0' : 'translate-x-full'"></div>
-            <div class="relative flex-1 text-center px-4 py-2 text-sm font-medium transition-colors duration-300"  :class="currentSelection === 'popular' ? 'text-white' : 'text-[#2c4f6a]'" @click="fetchPopularMovies" >
+            <div class="relative flex-1 px-4 py-2 text-sm font-medium text-center transition-colors duration-300"  :class="currentSelection === 'popular' ? 'text-white' : 'text-[#2c4f6a]'" @click="fetchPopularMovies" >
               Popular
             </div>
-            <div class="relative flex-1 text-center px-4 py-2 text-sm font-medium transition-colors duration-300" :class="currentSelection === 'top-rated' ? 'text-white' : 'text-[#2c4f6a]'" @click="fetchTopRatedMovies">
+            <div class="relative flex-1 px-4 py-2 text-sm font-medium text-center transition-colors duration-300" :class="currentSelection === 'top-rated' ? 'text-white' : 'text-[#2c4f6a]'" @click="fetchTopRatedMovies">
               Top Rated
             </div>
           </div>
         </div>
       </div>
       <div class="w-[1400px] gap-2 overflow-scroll">
-        <div class="h-max w-fit flex">
+        <div class="flex h-max w-fit">
           <CardItem v-for="movie in movies" :key="movie.id" :movie="movie" />
         </div>
       </div>
@@ -26,10 +26,6 @@
 import { ref, watch, onMounted, defineProps } from 'vue'
 import CardItem from './recommenderComponents/CardItem.vue';
 import { useFetch } from '../helpers/fetch';
-
-const props = defineProps({
-  searchTerm: String
-});
 
 const movies = ref([]);
 const currentSelection = ref('popular')
@@ -47,14 +43,6 @@ const fetchTopRatedMovies = async () => {
 
   currentSelection.value = 'top-rated';
 }
-
-watch(() => props.searchTerm, async (newTerm) => {
-  if (newTerm && newTerm.length >= 3) {
-    movies.value = await useFetch(`https://api.themoviedb.org/3/search/movie?api_key=348088421ad3fb3a9d6e56bb6a9a8f80&query=${ newTerm }&include_adult=false&language=en-US&page=1`);
-  } else if (newTerm.length === 0) {
-    await fetchPopularMovies();
-  }
-});
 
 onMounted(() => {
   fetchPopularMovies();
