@@ -6,21 +6,21 @@
         <div class="relative flex w-64 h-10 border border-[#032540] rounded-full overflow-hidden cursor-pointer">
           <div
             class="absolute top-0 left-0 h-full w-1/2 bg-[#032540] rounded-full transition-transform duration-300"
-            :class="currentSelection === 'popular' ? 'translate-x-0' : 'translate-x-full'"
+            :class="currentSelection === 'movie-recommendation' ? 'translate-x-0' : 'translate-x-full'"
           ></div>
           <div
             class="relative flex-1 px-4 py-2 text-sm font-medium text-center transition-colors duration-300"
-            :class="currentSelection === 'popular' ? 'text-white' : 'text-[#2c4f6a]'"
+            :class="currentSelection === 'movie-recommendation' ? 'text-white' : 'text-[#2c4f6a]'"
             @click="fetchPopularMovies"
           >
-            Popular
+            Movies
           </div>
           <div
             class="relative flex-1 px-4 py-2 text-sm font-medium text-center transition-colors duration-300"
-            :class="currentSelection === 'top-rated' ? 'text-white' : 'text-[#2c4f6a]'"
-            @click="fetchTopRatedMovies"
+            :class="currentSelection === 'tv-shows-recommendation' ? 'text-white' : 'text-[#2c4f6a]'"
+            @click="fetchTopRatedTvShows"
           >
-            Top Rated
+            TV Shows
           </div>
         </div>
       </div>
@@ -35,7 +35,7 @@
 
     <div v-else class="flex relative overflow-x-scroll h-[550px] w-full">
       <div class="flex">
-        <CardItem v-for="movie in movies" :key="movie.id" :movie="movie" />
+        <CardItem v-for="item in items" :key="item.id" :item="item" />
       </div>
     </div>
   </div>
@@ -47,11 +47,11 @@ import CardItem from './recommenderComponents/CardItem.vue'
 import { useFetch } from '../helpers/fetch'
 
 const loading = ref(false)
-const movies = ref([])
+const items = ref([])
 const currentSelection = ref('popular')
 
-const popularEndpoint = `https://api.themoviedb.org/3/discover/movie?api_key=${ import.meta.env.VITE_MY_API_KEY }&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`
-const topRatedEndpoint = `https://api.themoviedb.org/3/discover/movie?api_key=${ import.meta.env.VITE_MY_API_KEY }&include_adult=false&include_video=false&language=en-US&page=1&sort_by=vote_average.desc&without_genres=99,10755&vote_count.gte=200`
+const movieRecommendationsEndpoint = `https://api.themoviedb.org/4/account/680118a3ef5ae687cbd9eed4/movie/recommendations?page=1&language=en-US`
+const tvRecommendationsEndpoint = `https://api.themoviedb.org/4/account/680118a3ef5ae687cbd9eed4/tv/recommendations?page=1&language=en-US`
 
 const MIN_LOADING_MS = 600;
 
@@ -60,7 +60,7 @@ async function fetchWithMinLoading(endpoint, selectionKey) {
   loading.value = true
 
   const start = performance.now()
-  movies.value = await useFetch(endpoint)
+  items.value = await useFetch(endpoint)
   const elapsed = performance.now() - start
 
   if (elapsed < MIN_LOADING_MS) {
@@ -71,10 +71,10 @@ async function fetchWithMinLoading(endpoint, selectionKey) {
 }
 
 const fetchPopularMovies = () =>
-  fetchWithMinLoading(popularEndpoint, 'popular')
+  fetchWithMinLoading(movieRecommendationsEndpoint, 'movie-recommendation')
 
-const fetchTopRatedMovies = () =>
-  fetchWithMinLoading(topRatedEndpoint, 'top-rated')
+const fetchTopRatedTvShows = () =>
+  fetchWithMinLoading(tvRecommendationsEndpoint, 'tv-shows-recommendation')
 
 onMounted(fetchPopularMovies)
 </script>

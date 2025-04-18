@@ -2,24 +2,24 @@ import { defineStore } from 'pinia';
 
 export const useStore = defineStore('main', {
     state: () => ({
-        favoriteMovies: JSON.parse(localStorage.getItem('favoriteMovies')) ?? [],
+        favoriteItems: JSON.parse(localStorage.getItem('favoriteItems')) ?? [],
     }),
     actions: {
         toggleFavorite(movie) {
-            const index = this.favoriteMovies.findIndex(item => item.id === movie.id);
+            const index = this.favoriteItems.findIndex(item => item.id === movie.id);
 
             if (index === -1) {
-                this.favoriteMovies.push(movie);
+                this.favoriteItems.push(movie);
             } else {
-                this.favoriteMovies.splice(index, 1);
+                this.favoriteItems.splice(index, 1);
             }
 
-            localStorage.setItem('favoriteMovies', JSON.stringify(this.favoriteMovies));
+            localStorage.setItem('favoriteItems', JSON.stringify(this.favoriteItems));
         }
     },
     getters: {
         isFavorite(state) {
-            return (movie) => state.favoriteMovies.some(item => item.id === movie.id);
+            return (movie) => state.favoriteItems.some(item => item.id === movie.id);
         }
     },
     persist: true
