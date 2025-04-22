@@ -29,7 +29,7 @@ export default defineComponent({
 <template>
   <div class="relative w-64 p-2 mt-4" >
     <div class="relative">
-        <img class="object-cover w-full h-auto mb-4 rounded-xl" :src="getImageUrl()" :alt="`Poster of ${item.title}`" />
+        <img class="object-cover w-full h-[360px] mb-4 rounded-xl" :src="getImageUrl()" :alt="`Poster of ${item.title}`" />
         <div class="flex justify-center items-center-safe w-12 h-12 -bottom-5 left-0 absolute p-2 rounded-full border-4 border-[#00ff80] z-10 text-center text-s font-bold text-white bg-[#092d36]">
             {{ item.vote_average.toFixed(1) * 10 }} <span class="text-[10px] font-bold">%</span>
         </div>
